@@ -1,0 +1,35 @@
+services:
+  artifactory:
+    image: releases-docker.jfrog.io/jfrog/artifactory-cpp-ce@sha256:552a5500cc1e77962f61f4378f7a3cad1d7bf1106cc0dab781dc7e3561fcd3c7
+    container_name: artifactory
+
+    environment:
+      - JF_SHARED_DATABASE_TYPE=derby
+      - JF_SHARED_DATABASE_ALLOWNONPOSTGRESQL=true
+      - JF_JFCONNECT_ENABLED=false
+
+    ports:
+      - 8082:8082
+      - 8081:8081
+
+    volumes:
+      - artifactory_data:/var/opt/jfrog/artifactory
+      - /etc/localtime:/etc/localtime:ro
+
+    restart: always
+
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000
+
+    networks:
+      - artifactory-net
+
+volumes:
+  artifactory_data:
+
+networks:
+  artifactory-net:
+    driver: bridge

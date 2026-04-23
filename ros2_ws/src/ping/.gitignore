@@ -1,0 +1,10 @@
+# Ignore CMakeUserPresets.json
+CMakeUserPresets.json
+
+# Ignore everything inside the directory
+build/*
+log/*
+install/*
+
+# But do not ignore the .gitkeep files inside them
+!build/.gitkeep
