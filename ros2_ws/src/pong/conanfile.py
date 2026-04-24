@@ -17,6 +17,6 @@ class PingNode(ConanFile):
             "robot_base_config"
         ].module.RobotVersions.get_versions()
 
-        self.requires(f"pcl/{versions['pcl']}")
+        self.requires(f"yaml-cpp/{versions['yaml-cpp']}")
         self.requires(f"eigen/{versions['eigen']}")
         self.requires(f"nlohmann_json/{versions['nlohmann_json']}")

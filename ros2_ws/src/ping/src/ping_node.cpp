@@ -1,16 +1,24 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include <cv_bridge/cv_bridge.hpp>
+#if __has_include(<cv_bridge/cv_bridge.hpp>)
+  #include <cv_bridge/cv_bridge.hpp>
+#elif __has_include(<cv_bridge/cv_bridge.h>)
+  #include <cv_bridge/cv_bridge.h>
+#else
+  #error "cv_bridge not found"
+#endif
 #include <opencv2/opencv.hpp>
-
-#include <pcl/io/pcd_io.h>
+#include <yaml-cpp/yaml.h>
 
 class PingNode : public rclcpp::Node {
 public:
     PingNode() : Node("ping_node") {
-        // Instantiate a PCDWriter in order to test dynamic linking
-        pcl::PCDWriter writer;
-        RCLCPP_INFO(this->get_logger(), "PCL Link Test: %p", (void*)&writer);
+        YAML::Node config;
+        config["robot_name"] = "PingBot";
+        config["version"] = 1.0;
+
+        std::string name = config["robot_name"].as<std::string>();
+        RCLCPP_INFO(this->get_logger(), "YAML-CPP Link Test! Hello from: %s", name.c_str());
 
         pub_ = this->create_publisher<sensor_msgs::msg::Image>("ping_topic", 10);
         sub_ = this->create_subscription<sensor_msgs::msg::Image>(

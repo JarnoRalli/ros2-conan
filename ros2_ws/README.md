@@ -33,8 +33,9 @@ libraries by executing the following
 
 ## 2. Start Pong Node
 
+Run the following in a terminal in order to start the pong node:
+
 ```bash
-cd src/pong/
 source ./build/conanrun.sh
 source ./install/setup.bash
 ros2 run pong node
@@ -42,8 +43,9 @@ ros2 run pong node
 
 ## 3. Start Ping Node
 
+Run the following in a terminal in order to start the ping node:
+
 ```bash
-cd src/ping/
 source ./build/conanrun.sh
 source ./install/setup.bash
 ros2 run ping node

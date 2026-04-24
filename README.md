@@ -17,6 +17,25 @@ versions of libraries such as OpenCV for the Jetson platform. The tool used for 
 * Libraries where only binary artifacts exist need to be supported
 * The tool must integrate with the ROS 2 build system based on `colcon`
   * ROS 2 C/C++ packages use CMake/Ament
+* Libraries built with the tool need to be linkable using CMake
+  * Conan uses generators that product the required scaffolding for several different builds system
+
+Conan uses a combination of profile files and `conanfile.py` in order to deduce what libraries and which versions, and
+what build-system and compiler flags are used to build the libraries. Following is an example of a profile file
+
+```shell
+[settings]
+arch=x86_64
+build_type=Release
+compiler=gcc
+compiler.cppstd=gnu17
+compiler.libcxx=libstdc++11
+compiler.version=13
+os=Linux
+
+[options]
+*:shared=True
+```
 
 ## 1 Consistent Library Versions
 
@@ -174,7 +193,7 @@ Install CMake as per these [instructions](https://cmake.org/download/).
 
 ### 2.4 Create the `robot_base_config` Package
 
-Create the `robot_base_config` package in local cache (no Conan server required) as per the instructions at [conda/](./conda/README.md).
+Create the `robot_base_config` package in local cache (no Conan server required) as per the instructions at [./conan/README.md](./conan/README.md).
 
 ### 2.5 Build and Run
 
@@ -191,7 +210,9 @@ Contents are as follows:
   * This directory contains instructions for running Conan (Community Edition) locally. You only need to set this up if you don't
   have access to Conan artifactory server for testing purposes.
    * `robot_base_config` Conan package.
+* [docker/](./docker/README.md)
+  * Instructions for testing out the code in Raspberry Pi 5 using a Docker container.
 * [license](./LICENSE)
-  * BSD 3-Clause License file
+  * BSD 3-Clause License file.
 * [ros2_ws](./ros2_ws/README.md)
-  * ROS 2 workspace with the nodes
+  * ROS 2 workspace with the nodes.
