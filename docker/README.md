@@ -17,7 +17,7 @@ docker run -it \
   ros2-humble-conan
 ```
 
-After that you create the Conan package and build the workspace normally. Once built,
+After that you create the `robot_base_config` Conan package and build the workspace normally. Once built,
 you start the pong node and open another terminal in the same container. First you
 need to find out the ID of the running container (this is run in the host):
 

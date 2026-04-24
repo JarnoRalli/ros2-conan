@@ -210,7 +210,9 @@ Contents are as follows:
   * This directory contains instructions for running Conan (Community Edition) locally. You only need to set this up if you don't
   have access to Conan artifactory server for testing purposes.
    * `robot_base_config` Conan package.
+* [docker/](./docker/README.md)
+  * Instructions for testing out the code in Raspberry Pi 5 using a Docker container.
 * [license](./LICENSE)
-  * BSD 3-Clause License file
+  * BSD 3-Clause License file.
 * [ros2_ws](./ros2_ws/README.md)
-  * ROS 2 workspace with the nodes
+  * ROS 2 workspace with the nodes.
