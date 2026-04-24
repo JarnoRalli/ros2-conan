@@ -8,7 +8,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 
 # Find Conan packages
-find_package(PCL REQUIRED COMPONENTS common io filters)
+find_package(yaml-cpp REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 add_executable(node src/ping_node.cpp)
 
@@ -21,9 +22,7 @@ target_link_libraries(node
   rclcpp::rclcpp
   sensor_msgs::sensor_msgs_library
   cv_bridge::cv_bridge
-  PCL::common
-  PCL::io
-  PCL::filters
+  yaml-cpp::yaml-cpp
   Eigen3::Eigen
 )
 

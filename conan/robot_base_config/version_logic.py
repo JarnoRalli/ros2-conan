@@ -37,10 +37,10 @@ class RobotVersions:
         # We pin versions strictly to ensure reproducibility across the fleet.
         # Future distros can be added here as the robot stack evolves.
         if ros_distro == "kilted":
-            return {"eigen": "3.4.0", "pcl": "1.14.1", "nlohmann_json": "3.11.3"}
+            return {"eigen": "3.4.0", "yaml-cpp": "0.8.0", "nlohmann_json": "3.11.3"}
 
         if ros_distro == "humble":
-            return {"eigen": "3.4.0", "pcl": "1.14.1", "nlohmann_json": "3.11.3"}
+            return {"eigen": "3.4.0", "yaml-cpp": "0.8.0", "nlohmann_json": "3.11.3"}
 
         # Default fallback for rolling or unknown distributions
-        return {"eigen": "3.4.0", "pcl": "1.14.1", "nlohmann_json": "3.11.3"}
+        return {"eigen": "3.4.0", "yaml-cpp": "0.8.0", "nlohmann_json": "3.11.3"}

@@ -1,9 +1,15 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
     hooks:
-      - id: ruff
-        args: [--fix]
+      - id: isort
+        name: isort (python)
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args: [--max-line-length=88]
 
   - repo: https://github.com/psf/black
     rev: 24.10.0
@@ -17,7 +23,7 @@ repos:
       - id: nbstripout
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
