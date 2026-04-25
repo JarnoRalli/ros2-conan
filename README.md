@@ -67,14 +67,26 @@ ros2_ws/
         └── conanfile.py
 ```
 
-We have one `conanfile.py` in the workspace and then one in each of the nodes called `ping` and `pong`.
-The problem this creates is that each of the Conan files can define different versions of the same library like OpenCV.
-Having to define the same versions consistently across different files increases cognitive load
-the probability of an error. There are at least two different ways to tackle the problem:
+The file `project.repos` contains the information required to clone the `ping` and `pong` repositories
+into the `src/` folder. Since `ping` and `pong` are being developed in their respective repositories, they need
+to be testeable separately (in their own repos). This simply means that both `ping` and `pong` need to handle
+their own dependencies when being built and tested independently. This means that we have three separate build and test contexts:
+* `ros2_ws`: builds and tests everything.
+* `ping`: builds and tests `ping` separately.
+* `pong`: builds and tests `pong` separetely.
+
+In order to achieve this, each of the build contexts have their own `conanfile.py` that defines the dependencies.
+This creates a problem since each of the Conan files can define different versions of the same library, like OpenCV, leading
+to poor testeability of the system. For example, `pong` might build and pass the tests when tested in its own repo (due to
+having correct dependencies), whereas it might fail to even build in the `ros2_ws` context. Another problem is that having
+to define the library versions consistenly across different files increases cognitive load and the probability of an error.
+
+There are at least two different ways to tackle the problem:
 * Using [lockfiles](https://docs.conan.io/2/tutorial/versioning/lockfiles.html)
 * Using a central Conan package called `robot_base_config` that defines the versions
 
-Following section shows what `robot_base_config` would look like.
+In the approach based on a central Conan package (`robot_base_config`) if we change the version of a dependency in that package,
+then the version is changed everywhere. Following section shows what `robot_base_config` would look like.
 
 ### 1.1 Robot Base Config
 
@@ -135,7 +147,7 @@ class RobotVersions:
 ```
 
 All the Conan files in that particular project would use the version numbers defined in the `RobotVersions`. Following is
-an example how this would work.
+an example how this works in practice.
 
 ```python
 from conan import ConanFile
@@ -143,7 +155,7 @@ from conan.tools.files import copy
 import os
 
 class PingNode(ConanFile):
-    name = "pong_node"
+    name = "ping_node"
     version = "1.0.0"
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps", "CMakeToolchain"
@@ -182,10 +194,7 @@ conan profile detect
 
 ### 2.2 Install ROS 2 Kilted
 
-Instructions for installing ROS Kilted can be found [https://docs.ros.org/en/kilted/Installation.html](here). Some of the ament
-functionality is being removed from ROS 2 since modern CMake addresses some of the shortcomings that CMake had in the past. For
-more information, take a look at this [https://discourse.openrobotics.org/t/best-practices-for-replacing-ament-target-dependencies-in-kilted-while-maintaining-compatibility/43938/4](discussion).
-All the CMake files use minimum amount of ament-functionality and thus might not work on older versions.
+Instructions for installing ROS Kilted can be found [https://docs.ros.org/en/kilted/Installation.html](here).
 
 ### 2.3 Install CMake
 
@@ -199,16 +208,14 @@ Create the `robot_base_config` package in local cache (no Conan server required)
 
 Build the and the nodes are per the instructions at [ros2_ws](./ros2_ws/README.md).
 
-## 3. Contents
+## 3. Repo Contents
 
 Contents are as follows:
 
 * [artifactory/](./artifactory/README.md)
-  * This directory contains instructions for running Artifactory (Community Edition) locally. You only need to set this up if you don't
-  have access to Artifactory server for testing purposes.
+  * This directory contains instructions for running Artifactory (Community Edition) locally.
 * [conan/](./conan/README.md)
-  * This directory contains instructions for running Conan (Community Edition) locally. You only need to set this up if you don't
-  have access to Conan artifactory server for testing purposes.
+  * This directory contains instructions for running Conan (Community Edition) locally.
    * `robot_base_config` Conan package.
 * [docker/](./docker/README.md)
   * Instructions for testing out the code in Raspberry Pi 5 using a Docker container.
