@@ -1,0 +1,46 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/jarnoralli/ros2-conan:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build
+        shell: bash
+        run: |
+          # Detect Conan profile
+          conan profile detect --force
+
+          # Enable ROS 2 environment
+          source /opt/ros/humble/setup.bash
+
+          # Build the Conan package
+          cd ./conan/robot_base_config
+          conan create . --user einherjar --channel stable
+
+          # Install dependencies
+          cd ../../ros2_ws
+          conan install . --output-folder=build --build=missing \
+            -c tools.system.package_manager:mode=install \
+            -c tools.system.package_manager:sudo=True \
+            -s build_type=Release
+
+          # Build
+          colcon build \
+            --cmake-args \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE=$(pwd)/build/conan_toolchain.cmake
