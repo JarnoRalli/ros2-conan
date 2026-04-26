@@ -1,3 +1,6 @@
+[![build](https://github.com/JarnoRalli/ros2-conan/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/JarnoRalli/ros2-conan/actions/workflows/build.yml)
+[![pre-commit](https://github.com/JarnoRalli/ros2-conan/actions/workflows/pre-commit.yml/badge.svg?branch=main&event=push)](https://github.com/JarnoRalli/ros2-conan/actions/workflows/pre-commit.yml)
+
 # ROS2 with Conan
 
 This repository studies how Conan can be used for managing 3rd party libraries with the ROS 2 framework. The challenge
